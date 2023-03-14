@@ -1,18 +1,19 @@
 import { Order } from 'src/orders/order.entity';
 import { User } from 'src/users/user.entity';
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 
 @Entity()
 export class Subscription {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(type => User, user => user.subscriptions)
-  user: User;
+  @ManyToMany(type => User)
+  @JoinTable()
+  users: User;
 
   @OneToMany(type => Order, order => order.subscription)
   orders: Order[];
 
-  @Column({type: 'time with time zone'})
+  @Column({type: 'time with time zone', nullable: true})
   nextOrderDate: Date; 
 }

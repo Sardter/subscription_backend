@@ -1,5 +1,5 @@
-import { Address } from 'src/addresses/address.entity';
-import { Subscription } from 'src/subscription/subscription.entity';
+import { Address } from 'src/addresses/entities/address.entity';
+import { User } from 'src/users/user.entity';
 import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 
 @Entity()
@@ -7,8 +7,8 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(type => Subscription, subscription => subscription.orders)
-  subscription: Subscription;
+  @ManyToOne(type => User, user => user.orders)
+  user: User;
 
   @ManyToOne(type => Address, address => address.orders)
   address: Address;

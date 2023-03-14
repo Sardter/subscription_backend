@@ -1,5 +1,6 @@
-import { Address } from 'src/addresses/address.entity';
-import { Subscription } from 'src/subscription/subscription.entity';
+import { type } from 'os';
+import { Address } from 'src/addresses/entities/address.entity';
+import { Order } from 'src/orders/order.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
@@ -22,9 +23,12 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(type => Address, address => address.user)
-  addresses: Address[]
+  @Column({ default: false })
+  isStaff: boolean;
 
-  @OneToMany(type => Subscription, subscription => subscription.user)
-  subscriptions: Subscription[]
+  @OneToMany(type => Address, address => address.user)
+  addresses: Address[];
+
+  @OneToMany(type => Order, order => order.user)
+  orders: Order[];
 }

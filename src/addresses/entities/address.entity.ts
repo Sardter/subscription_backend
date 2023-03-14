@@ -1,34 +1,7 @@
-import { type } from 'os';
 import { Order } from 'src/orders/order.entity';
 import { User } from 'src/users/user.entity';
 import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, OneToMany } from 'typeorm';
-
-@Entity()
-export class State {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  name: string;
-
-  @ManyToOne(type => Country, country => country.states)
-  country: Country
-}
-
-@Entity()
-export class Country {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  name: string;
-
-  @OneToMany(type => State, state => state.country)
-  states: State[];
-
-  @OneToMany(type => Address, address => address.country)
-  addresses: Address[];
-}
+import { Country } from './country.entity';
 
 @Entity()
 export class Address {

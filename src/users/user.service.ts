@@ -1,30 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { assert } from 'console';
 import { DataSource, Repository } from 'typeorm';
-import { CreateUser } from './interfaces/create';
+import { UserCreateData } from './interfaces/create';
+import { UserFilter } from './interfaces/filter';
 import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
-    private dataSource: DataSource,
+    private repo: Repository<User>
   ) {}
 
   findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+    return this.repo.find();
   }
 
-  findOne(id: number): Promise<User> {
-    return this.usersRepository.findOneBy({ id });
+  findOne(id: number | null, username: string | null): Promise<User> {
+    assert(id != null || username != null, "Both id and username cannot be null");
+    return this.repo.findOneBy({ id, username });
+  }
+
+  filter(filter: UserFilter): Promise<User[]> {
+    return this.repo.findBy(filter);
   }
 
   async remove(id: number): Promise<void> {
-    await this.usersRepository.delete(id);
+    await this.repo.delete(id);
   }
 
-  createUser(user: CreateUser) {
-    return this.usersRepository.create(user);
+  create(user: UserCreateData) {
+    return this.repo.create(user);
+  }
+
+  update(id: number, user: UserCreateData) {
+    return this.repo.update(id, user);
   }
 }
