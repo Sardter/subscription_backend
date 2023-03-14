@@ -9,7 +9,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private dataSource: DataSource
+    private dataSource: DataSource,
   ) {}
 
   findAll(): Promise<User[]> {
@@ -24,7 +24,7 @@ export class UsersService {
     await this.usersRepository.delete(id);
   }
 
-  async createUser(user: CreateUser) {
-    return await this.usersRepository.create(user);
+  createUser(user: CreateUser) {
+    return this.usersRepository.create(user);
   }
 }
