@@ -8,19 +8,14 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { Subscription } from '@prisma/client';
 import { SubscriptionCreateData } from './interfaces/create';
 import { SubscriptionFilter } from './interfaces/filter';
-import { Subscription } from './subscription.entity';
 import { SubscriptionService } from './subscription.service';
 
 @Controller('subscriptions')
 export class SubscriptionController {
   constructor(private service: SubscriptionService) {}
-
-  @Get()
-  async findAll(): Promise<Subscription[]> {
-    return this.service.findAll();
-  }
 
   @Get()
   async filter(@Query() params: SubscriptionFilter): Promise<Subscription[]> {

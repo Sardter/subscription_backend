@@ -8,19 +8,14 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { Order } from '@prisma/client';
 import { OrderCreateData } from './interfaces/create';
 import { OrderFilter } from './interfaces/filter';
-import { Order } from './order.entity';
-import { OrderService } from './order.service';
+import { OrdersService } from './order.service';
 
 @Controller('orders')
 export class OrderController {
-  constructor(private service: OrderService) {}
-
-  @Get()
-  async findAll(): Promise<Order[]> {
-    return this.service.findAll();
-  }
+  constructor(private service: OrdersService) {}
 
   @Get()
   async filter(@Query() params: OrderFilter): Promise<Order[]> {

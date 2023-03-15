@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common';
-import { UserCreateData as UserCreateData } from './interfaces/create';
-import { UserFilter as UserFilterData } from './interfaces/filter';
-import { User } from './user.entity';
+import { User } from '@prisma/client';
+import { UserCreateData } from './interfaces/create';
+import { UserFilter } from './interfaces/filter';
 import { UsersService } from './user.service';
 
 @Controller('users')
@@ -9,12 +9,7 @@ export class UsersController {
   constructor(private service: UsersService) {}
 
   @Get()
-  async findAll(): Promise<User[]> {
-    return this.service.findAll();
-  }
-
-  @Get()
-  async filter(@Query() params: UserFilterData): Promise<User[]> {
+  async filter(@Query() params: UserFilter): Promise<User[]> {
     return this.service.filter(params);
   }
 

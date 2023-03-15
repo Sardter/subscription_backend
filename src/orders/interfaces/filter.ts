@@ -1,8 +1,11 @@
-import { Address } from "src/addresses/entities/address.entity";
-import { User } from "src/users/user.entity";
+import { Prisma } from "@prisma/client";
 
 export interface OrderFilter {
-    date: Date;
-    user: User;
-    address: Address;
+    select?: Prisma.OrderSelect;
+    include?: Prisma.OrderInclude;
+    where?: Prisma.OrderWhereInput;
+    orderBy?: Prisma.Enumerable<Prisma.OrderOrderByWithRelationInput>;
+    cursor?: Prisma.OrderWhereUniqueInput;
+    take?: number;
+    skip?: number;
 }

@@ -1,40 +1,52 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '@prisma/client';
 import { assert } from 'console';
-import { DataSource, Repository } from 'typeorm';
+import { PrismaService } from 'src/prisma.service';
 import { UserCreateData } from './interfaces/create';
 import { UserFilter } from './interfaces/filter';
-import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User)
-    private repo: Repository<User>
-  ) {}
+  constructor(private readonly repo: PrismaService) {}
 
-  findAll(): Promise<User[]> {
-    return this.repo.find();
-  }
-
-  findOne(id: number | null, username: string | null): Promise<User> {
-    assert(id != null || username != null, "Both id and username cannot be null");
-    return this.repo.findOneBy({ id, username });
+  async findOne(
+    id: number | null,
+    username: string | null,
+  ): Promise<User | null> {
+    assert(
+      id != null || username != null,
+      'Both id and username cannot be null',
+    );
+    return await this.repo.user.findFirst({
+      where: {
+        id: id,
+        username: username,
+      },
+    });
   }
 
   filter(filter: UserFilter): Promise<User[]> {
-    return this.repo.findBy(filter);
+    return this.repo.user.findMany(filter);
   }
 
   async remove(id: number): Promise<void> {
-    await this.repo.delete(id);
+    await this.repo.user.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 
   create(user: UserCreateData) {
-    return this.repo.create(user);
+    return this.repo.user.create(user);
   }
 
   update(id: number, user: UserCreateData) {
-    return this.repo.update(id, user);
+    return this.repo.user.update({
+      where: {
+        id: id,
+      },
+      data: user.data,
+    });
   }
 }

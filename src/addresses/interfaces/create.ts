@@ -1,20 +1,13 @@
-import { User } from "src/users/user.entity";
-import { Country } from "../entities/country.entity";
+import { Prisma } from "@prisma/client";
 
 export interface AddressCreateData {
-    country: Country;
-    city: string;
-    zipcode: string;
-    addressLine1: string;
-    addressLine2: string;
-    phone: string;
-    user: User;
+    data: Prisma.AddressCreateInput
 }
 
 export interface CountryCreateData {
-
+    data: Prisma.CountryCreateInput
 }
 
 export interface StateCreateData {
-
+    data: Prisma.StateCreateInput
 }

@@ -8,19 +8,14 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { Address } from '../entities/address.entity';
-import { AddressService } from '../servises/address.service';
+import { AddressesService } from '../servises/address.service';
 import { AddressCreateData } from '../interfaces/create';
 import { AddressFilter } from '../interfaces/filter';
+import { Address } from '@prisma/client';
 
 @Controller('addresses')
 export class AddressController {
-  constructor(private service: AddressService) {}
-
-  @Get()
-  async findAll(): Promise<Address[]> {
-    return this.service.findAll();
-  }
+  constructor(private service: AddressesService) {}
 
   @Get()
   async filter(@Query() params: AddressFilter): Promise<Address[]> {

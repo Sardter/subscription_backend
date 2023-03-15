@@ -1,38 +1,43 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { State } from '../entities/state.entity';
-import { CountryCreateData, StateCreateData } from '../interfaces/create';
-import { CountryFilter, StateFilter } from '../interfaces/filter';
+import { State } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
+import { StateCreateData } from '../interfaces/create';
+import { StateFilter } from '../interfaces/filter';
 
 @Injectable()
-export class StateService {
-  constructor(
-    @InjectRepository(StateService)
-    private repo: Repository<State>
-  ) {}
+export class StatesService {
+  constructor(private readonly repo: PrismaService) {}
 
-  findAll(): Promise<State[]> {
-    return this.repo.find();
-  }
-
-  findOne(id: number): Promise<State> {
-    return this.repo.findOneBy({ id });
+  async findOne(id: number): Promise<State | null> {
+    return await this.repo.state.findFirst({
+      where: {
+        id: id,
+      },
+    });
   }
 
   filter(filter: StateFilter): Promise<State[]> {
-    return this.repo.findBy(filter);
+    return this.repo.state.findMany(filter);
   }
 
   async remove(id: number): Promise<void> {
-    await this.repo.delete(id);
+    await this.repo.state.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 
-  create(order: StateCreateData) {
-    return this.repo.create(order);
+  create(state: StateCreateData) {
+    return this.repo.state.create(state);
   }
 
-  update(id: number, order: StateCreateData) {
-    return this.repo.update(id, order);
+  update(id: number, state: StateCreateData) {
+    return this.repo.state.update({
+      where: {
+        id: id,
+      },
+      data: state.data,
+    });
   }
 }

@@ -8,19 +8,14 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { State } from '../entities/state.entity';
+import { State } from '@prisma/client';
 import { StateCreateData } from '../interfaces/create';
 import { StateFilter } from '../interfaces/filter';
-import { StateService } from '../servises/state.service';
+import { StatesService } from '../servises/state.service';
 
 @Controller('states')
 export class StateController {
-  constructor(private service: StateService) {}
-
-  @Get()
-  async findAll(): Promise<State[]> {
-    return this.service.findAll();
-  }
+  constructor(private service: StatesService) {}
 
   @Get()
   async filter(@Query() params: StateFilter): Promise<State[]> {

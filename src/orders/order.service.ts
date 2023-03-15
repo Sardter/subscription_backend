@@ -1,38 +1,43 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Order } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
 import { OrderCreateData } from './interfaces/create';
 import { OrderFilter } from './interfaces/filter';
-import { Order } from './order.entity';
 
 @Injectable()
-export class OrderService {
-  constructor(
-    @InjectRepository(OrderService)
-    private repo: Repository<Order>
-  ) {}
+export class OrdersService {
+  constructor(private readonly repo: PrismaService) {}
 
-  findAll(): Promise<Order[]> {
-    return this.repo.find();
-  }
-
-  findOne(id: number): Promise<Order> {
-    return this.repo.findOneBy({ id });
+  async findOne(id: number): Promise<Order | null> {
+    return await this.repo.order.findFirst({
+      where: {
+        id: id,
+      },
+    });
   }
 
   filter(filter: OrderFilter): Promise<Order[]> {
-    return this.repo.findBy(filter);
+    return this.repo.order.findMany(filter);
   }
 
   async remove(id: number): Promise<void> {
-    await this.repo.delete(id);
+    await this.repo.order.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 
   create(order: OrderCreateData) {
-    return this.repo.create(order);
+    return this.repo.order.create(order);
   }
 
   update(id: number, order: OrderCreateData) {
-    return this.repo.update(id, order);
+    return this.repo.order.update({
+      where: {
+        id: id,
+      },
+      data: order.data,
+    });
   }
 }

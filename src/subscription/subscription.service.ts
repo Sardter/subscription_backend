@@ -1,59 +1,91 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { OrderService } from 'src/orders/order.service';
-import { Repository } from 'typeorm';
+import { Subscription, User } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
 import { SubscriptionCreateData } from './interfaces/create';
 import { SubscriptionFilter } from './interfaces/filter';
-import { Subscription } from './subscription.entity';
 
 @Injectable()
 export class SubscriptionService {
-  constructor(
-    @InjectRepository(Subscription)
-    private repo: Repository<Subscription>,
-  ) {}
+  constructor(private readonly repo: PrismaService) {}
 
-  findAll(): Promise<Subscription[]> {
-    return this.repo.find();
-  }
-
-  findOne(id: number): Promise<Subscription> {
-    return this.repo.findOneBy({ id });
+  async findOne(id: number | null): Promise<Subscription | null> {
+    return await this.repo.subscription.findFirst({
+      where: {
+        id: id,
+      },
+    });
   }
 
   filter(filter: SubscriptionFilter): Promise<Subscription[]> {
-    return this.repo.findBy(filter);
+    return this.repo.subscription.findMany(filter);
   }
 
   async remove(id: number): Promise<void> {
-    await this.repo.delete(id);
+    await this.repo.subscription.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 
   create(subscription: SubscriptionCreateData) {
-    return this.repo.create(subscription);
+    return this.repo.subscription.create(subscription);
   }
 
   update(id: number, subscription: SubscriptionCreateData) {
-    return this.repo.update(id, subscription);
+    return this.repo.subscription.update({
+      where: {
+        id: id,
+      },
+      data: subscription.data,
+    });
   }
 
-  async createOrderOnDate(
-    subscription: Subscription,
-    date: Date,
-    nextDate: Date | null,
-    orderService: OrderService,
-  ): Promise<boolean> {
-    if (subscription.nextOrderDate > date) return false;
-    subscription.users.forEach((user) => {
-      if (user.selectedAddress)
-        orderService.create({
-          date: date,
-          user: user,
-          address: user.addresses[user.selectedAddress],
-        });
+  async createOrderOnDate(date: Date, nextDate: Date | null): Promise<boolean> {
+    const subscriptions = await this.repo.subscription.findMany({
+      where: {
+        date: {
+          lte: nextDate,
+        },
+      },
+      include: {
+        users: {
+          where: {
+            NOT: [{ selectedAdress: null }],
+          },
+          include: {
+            addresses: true,
+          },
+        },
+      },
     });
-    subscription.nextOrderDate = nextDate;
-    this.update(subscription.id, subscription);
+
+    subscriptions.forEach((subscription) => {
+      subscription.users.forEach((user) =>
+        this.repo.order.create({
+          data: {
+            date: date,
+            address: {
+              connect: user.addresses[user.selectedAdress],
+            },
+            user: {
+              connect: user,
+            },
+          },
+        }),
+      );
+    });
+
+    this.repo.subscription.updateMany({
+      where: {
+        id: {
+          in: subscriptions.map((e) => e.id),
+        },
+      },
+      data: {
+        date: nextDate,
+      },
+    });
     return true;
   }
 }

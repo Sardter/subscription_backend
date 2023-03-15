@@ -1,38 +1,43 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Address } from '../entities/address.entity';
+import { Address } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
 import { AddressCreateData } from '../interfaces/create';
 import { AddressFilter } from '../interfaces/filter';
 
 @Injectable()
-export class AddressService {
-  constructor(
-    @InjectRepository(AddressService)
-    private repo: Repository<Address>
-  ) {}
+export class AddressesService {
+  constructor(private readonly repo: PrismaService) {}
 
-  findAll(): Promise<Address[]> {
-    return this.repo.find();
-  }
-
-  findOne(id: number): Promise<Address> {
-    return this.repo.findOneBy({ id });
+  async findOne(id: number): Promise<Address | null> {
+    return await this.repo.address.findFirst({
+      where: {
+        id: id,
+      },
+    });
   }
 
   filter(filter: AddressFilter): Promise<Address[]> {
-    return this.repo.findBy(filter);
+    return this.repo.address.findMany(filter);
   }
 
   async remove(id: number): Promise<void> {
-    await this.repo.delete(id);
+    await this.repo.address.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 
-  create(order: AddressCreateData) {
-    return this.repo.create(order);
+  create(address: AddressCreateData) {
+    return this.repo.address.create(address);
   }
 
-  update(id: number, order: AddressCreateData) {
-    return this.repo.update(id, order);
+  update(id: number, address: AddressCreateData) {
+    return this.repo.address.update({
+      where: {
+        id: id,
+      },
+      data: address.data,
+    });
   }
 }

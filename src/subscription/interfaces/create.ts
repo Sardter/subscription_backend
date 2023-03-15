@@ -1,3 +1,5 @@
+import { Prisma } from "@prisma/client";
+
 export interface SubscriptionCreateData {
-    nextOrderDate: Date | null;
+    data: Prisma.SubscriptionCreateInput
 }

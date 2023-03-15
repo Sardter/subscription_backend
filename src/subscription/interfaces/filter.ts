@@ -1,7 +1,10 @@
-import { Order } from "src/orders/order.entity";
-import { User } from "src/users/user.entity";
+import { Prisma } from "@prisma/client";
+
 
 export interface SubscriptionFilter {
-    nextOrderDate: Date | null;
-    users: User[] | null;
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.SubscriptionWhereUniqueInput;
+    where?: Prisma.SubscriptionWhereInput;
+    orderBy?: Prisma.SubscriptionOrderByWithRelationInput;
 }

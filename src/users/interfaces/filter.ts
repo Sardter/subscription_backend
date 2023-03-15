@@ -1,9 +1,9 @@
-import { Address } from "src/addresses/entities/address.entity"
-import { Subscription } from "src/subscription/subscription.entity"
+import { Prisma } from "@prisma/client";
 
 export interface UserFilter {
-    isActive: boolean | null;
-    isStaff: boolean | null;
-    subscriptions: Subscription[] | null;
-    addresses: Address[] | null;
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.UserWhereUniqueInput;
+    where?: Prisma.UserWhereInput;
+    orderBy?: Prisma.UserOrderByWithRelationInput;
 }
