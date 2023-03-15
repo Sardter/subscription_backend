@@ -1,11 +1,15 @@
-import { Prisma } from "@prisma/client";
+import { ApiProperty } from "@nestjs/swagger";
 
-export interface OrderFilter {
-    select?: Prisma.OrderSelect;
-    include?: Prisma.OrderInclude;
-    where?: Prisma.OrderWhereInput;
-    orderBy?: Prisma.Enumerable<Prisma.OrderOrderByWithRelationInput>;
-    cursor?: Prisma.OrderWhereUniqueInput;
+export class OrderFilter {
+    @ApiProperty()
+    orderById?: "asc" | "desc";
+
+    @ApiProperty()
+    orderByDate?: "asc" | "desc";
+
+    @ApiProperty()
     take?: number;
+
+    @ApiProperty()
     skip?: number;
 }

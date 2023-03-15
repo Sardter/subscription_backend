@@ -22,7 +22,7 @@ export class StateController {
     return this.service.filter(params);
   }
 
-  @Get()
+  @Get(':id')
   async findOne(@Param('id') id: number): Promise<State | null> {
     return this.service.findOne(id);
   }

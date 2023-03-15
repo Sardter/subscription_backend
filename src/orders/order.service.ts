@@ -17,7 +17,10 @@ export class OrdersService {
   }
 
   filter(filter: OrderFilter): Promise<Order[]> {
-    return this.repo.order.findMany(filter);
+    return this.repo.order.findMany({
+      skip: filter.skip,
+      take: filter.take,
+    });
   }
 
   async remove(id: number): Promise<void> {

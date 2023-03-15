@@ -1,9 +1,9 @@
-import { Prisma } from "@prisma/client";
+import { ApiProperty } from '@nestjs/swagger';
 
-export interface UserFilter {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.UserWhereUniqueInput;
-    where?: Prisma.UserWhereInput;
-    orderBy?: Prisma.UserOrderByWithRelationInput;
+export class UserFilter {
+  @ApiProperty()
+  take?: number;
+
+  @ApiProperty()
+  skip?: number;
 }

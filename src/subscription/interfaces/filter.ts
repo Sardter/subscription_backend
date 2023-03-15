@@ -1,10 +1,10 @@
-import { Prisma } from "@prisma/client";
+import { ApiProperty } from "@nestjs/swagger";
 
 
-export interface SubscriptionFilter {
-    skip?: number;
+export class SubscriptionFilter {
+    @ApiProperty()
     take?: number;
-    cursor?: Prisma.SubscriptionWhereUniqueInput;
-    where?: Prisma.SubscriptionWhereInput;
-    orderBy?: Prisma.SubscriptionOrderByWithRelationInput;
+
+    @ApiProperty()
+    skip?: number;
 }

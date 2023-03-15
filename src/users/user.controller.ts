@@ -13,12 +13,18 @@ export class UsersController {
     return this.service.filter(params);
   }
 
-  @Get()
-  async findOne(
-    @Param('id') id: number | null,
-    @Param('username') username: string | null,
+  @Get(':id')
+  async findOneById(
+    @Param('id') id: number,
   ): Promise<User | null> {
-    return this.service.findOne(id, username);
+    return this.service.findOne(id, null);
+  }
+
+  @Get(':username')
+  async findOneByUsername(
+    @Param('username') username: string,
+  ): Promise<User | null> {
+    return this.service.findOne(null, username);
   }
 
   @Post()
@@ -26,12 +32,12 @@ export class UsersController {
     return this.service.create(body);
   }
 
-  @Delete()
+  @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {
     return this.service.remove(id);
   }
 
-  @Patch()
+  @Patch(':id')
   async update(@Param('id') id: number, @Body() body: UserCreateData): Promise<User> {
     this.service.update(id, body);
     return this.service.findOne(id, null);

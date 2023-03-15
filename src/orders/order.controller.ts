@@ -22,7 +22,7 @@ export class OrderController {
     return this.service.filter(params);
   }
 
-  @Get()
+  @Get(':id')
   async findOne(@Param('id') id: number): Promise<Order | null> {
     return this.service.findOne(id);
   }
@@ -32,12 +32,12 @@ export class OrderController {
     return this.service.create(body);
   }
 
-  @Delete()
+  @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {
     return this.service.remove(id);
   }
 
-  @Patch()
+  @Patch(':id')
   async update(
     @Param('id') id: number,
     @Body() body: OrderCreateData,
