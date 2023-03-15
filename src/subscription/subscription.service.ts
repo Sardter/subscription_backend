@@ -29,7 +29,9 @@ export class SubscriptionService {
   }
 
   create(subscription: SubscriptionCreateData) {
-    return this.repo.subscription.create(subscription);
+    return this.repo.subscription.create({
+      data: subscription.data(),
+    });
   }
 
   update(id: number, subscription: SubscriptionCreateData) {
@@ -37,7 +39,7 @@ export class SubscriptionService {
       where: {
         id: id,
       },
-      data: subscription.data,
+      data: subscription.data(),
     });
   }
 
@@ -51,29 +53,34 @@ export class SubscriptionService {
       include: {
         users: {
           where: {
-            NOT: [{ selectedAdress: null }],
+            NOT: [{ addresses: { none: {} } }],
           },
           include: {
-            addresses: true,
+            addresses: {
+              where: {
+                selected: true,
+              },
+            },
           },
         },
       },
     });
 
     subscriptions.forEach((subscription) => {
-      subscription.users.forEach((user) =>
-        this.repo.order.create({
-          data: {
-            date: date,
-            address: {
-              connect: user.addresses[user.selectedAdress],
+      subscription.users.forEach((user) => {
+        if (user.addresses.length > 0)
+          this.repo.order.create({
+            data: {
+              date: date,
+              address: {
+                connect: user.addresses[0],
+              },
+              user: {
+                connect: user,
+              },
             },
-            user: {
-              connect: user,
-            },
-          },
-        }),
-      );
+          });
+      });
     });
 
     this.repo.subscription.updateMany({

@@ -38,7 +38,9 @@ export class UsersService {
   }
 
   create(user: UserCreateData) {
-    return this.repo.user.create(user);
+    return this.repo.user.create({
+      data: user.data()
+    });
   }
 
   update(id: number, user: UserCreateData) {
@@ -46,7 +48,7 @@ export class UsersService {
       where: {
         id: id,
       },
-      data: user.data,
+      data: user.data(),
     });
   }
 }

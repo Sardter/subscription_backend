@@ -9,8 +9,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { State } from '@prisma/client';
-import { StateCreateData } from '../interfaces/create';
 import { StateFilter } from '../interfaces/filter';
+import { StateCreateData } from '../interfaces/state.dto';
 import { StatesService } from '../servises/state.service';
 
 @Controller('states')

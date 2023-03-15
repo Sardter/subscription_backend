@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Address } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
-import { AddressCreateData } from '../interfaces/create';
+import { AddressCreateData } from '../interfaces/address.dto';
 import { AddressFilter } from '../interfaces/filter';
 
 @Injectable()
@@ -29,7 +29,9 @@ export class AddressesService {
   }
 
   create(address: AddressCreateData) {
-    return this.repo.address.create(address);
+    return this.repo.address.create({
+      data: address.data()
+    });
   }
 
   update(id: number, address: AddressCreateData) {
@@ -37,7 +39,7 @@ export class AddressesService {
       where: {
         id: id,
       },
-      data: address.data,
+      data: address.data(),
     });
   }
 }

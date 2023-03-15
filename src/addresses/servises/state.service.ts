@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { State } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
-import { StateCreateData } from '../interfaces/create';
 import { StateFilter } from '../interfaces/filter';
+import { StateCreateData } from '../interfaces/state.dto';
 
 @Injectable()
 export class StatesService {
@@ -29,7 +29,9 @@ export class StatesService {
   }
 
   create(state: StateCreateData) {
-    return this.repo.state.create(state);
+    return this.repo.state.create({
+      data: state.data()
+    });
   }
 
   update(id: number, state: StateCreateData) {
@@ -37,7 +39,7 @@ export class StatesService {
       where: {
         id: id,
       },
-      data: state.data,
+      data: state.data(),
     });
   }
 }

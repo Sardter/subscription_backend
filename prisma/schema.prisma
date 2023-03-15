@@ -22,8 +22,6 @@ model User {
   addresses Address[]
   orders    Order[]
 
-  selectedAdress Int?
-
   subscriptions Subscription[]
 }
 
@@ -39,7 +37,7 @@ model Order {
 }
 
 model Subscription {
-  id Int @id @default(autoincrement())
+  id   Int       @id @default(autoincrement())
   date DateTime?
 
   users User[]
@@ -47,6 +45,7 @@ model Subscription {
 
 model Address {
   id        Int     @id @default(autoincrement())
+  selected  Boolean @default(false)
   country   Country @relation(fields: [countryId], references: [id])
   countryId Int
   state     State   @relation(fields: [stateId], references: [id])
@@ -62,6 +61,7 @@ model Address {
 
 model Country {
   id        Int       @id @default(autoincrement())
+  name      String
   states    State[]
   addresses Address[]
 }

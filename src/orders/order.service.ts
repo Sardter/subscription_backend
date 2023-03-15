@@ -29,7 +29,9 @@ export class OrdersService {
   }
 
   create(order: OrderCreateData) {
-    return this.repo.order.create(order);
+    return this.repo.order.create({
+      data: order.data()
+    });
   }
 
   update(id: number, order: OrderCreateData) {
@@ -37,7 +39,7 @@ export class OrdersService {
       where: {
         id: id,
       },
-      data: order.data,
+      data: order.data(),
     });
   }
 }

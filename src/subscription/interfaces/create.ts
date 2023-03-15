@@ -1,5 +1,20 @@
-import { Prisma } from "@prisma/client";
+import { ApiProperty } from '@nestjs/swagger';
 
-export interface SubscriptionCreateData {
-    data: Prisma.SubscriptionCreateInput
+export class SubscriptionCreateData {
+  @ApiProperty()
+  date?: Date;
+
+  @ApiProperty()
+  users: number[];
+
+  data() {
+    return {
+      date: this.date,
+      users: {
+        connect: this.users.map((user) => {
+          return { id: user };
+        }),
+      },
+    };
+  }
 }

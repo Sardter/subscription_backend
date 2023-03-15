@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { Country } from '@prisma/client';
-import { CountryCreateData } from '../interfaces/create';
+import { CountryCreateData } from '../interfaces/country.dto';
 import { CountryFilter } from '../interfaces/filter';
 import { CountriesService } from '../servises/country.service';
 
@@ -22,7 +22,7 @@ export class CountryController {
     return this.service.filter(params);
   }
 
-  @Get()
+  @Get(':id')
   async findOne(@Param('id') id: number): Promise<Country | null> {
     return this.service.findOne(id);
   }

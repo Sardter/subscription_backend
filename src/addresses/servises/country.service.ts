@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Country } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
-import { CountryCreateData } from '../interfaces/create';
+import { CountryCreateData } from '../interfaces/country.dto';
 import { CountryFilter } from '../interfaces/filter';
 
 @Injectable()
@@ -29,7 +29,9 @@ export class CountriesService {
   }
 
   create(country: CountryCreateData) {
-    return this.repo.country.create(country);
+    return this.repo.country.create({
+      data: country.data()
+    });
   }
 
   update(id: number, country: CountryCreateData) {
@@ -37,7 +39,7 @@ export class CountriesService {
       where: {
         id: id,
       },
-      data: country.data,
+      data: country.data(),
     });
   }
 }

@@ -9,9 +9,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { AddressesService } from '../servises/address.service';
-import { AddressCreateData } from '../interfaces/create';
 import { AddressFilter } from '../interfaces/filter';
 import { Address } from '@prisma/client';
+import { AddressCreateData } from '../interfaces/address.dto';
 
 @Controller('addresses')
 export class AddressController {
