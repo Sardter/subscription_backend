@@ -9,10 +9,7 @@ export class Subscription {
 
   @ManyToMany(type => User)
   @JoinTable()
-  users: User;
-
-  @OneToMany(type => Order, order => order.subscription)
-  orders: Order[];
+  users: User[];
 
   @Column({type: 'time with time zone', nullable: true})
   nextOrderDate: Date; 

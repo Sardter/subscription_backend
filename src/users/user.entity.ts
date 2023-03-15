@@ -29,6 +29,9 @@ export class User {
   @OneToMany(type => Address, address => address.user)
   addresses: Address[];
 
+  @Column({nullable: true})
+  selectedAddress: number;
+
   @OneToMany(type => Order, order => order.user)
   orders: Order[];
 }
