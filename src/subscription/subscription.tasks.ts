@@ -8,15 +8,17 @@ export class TasksService {
     private service: SubscriptionService,
   ) {}
 
-  @Cron(CronExpression.EVERY_10_MINUTES)
+  @Cron(CronExpression.EVERY_MINUTE)
   async handleCron() {
     const date = new Date();
     const nextDate = new Date(
       date.getFullYear(),
-      date.getMonth() + 1,
+      //date.getMonth() + 1,
+      date.getMonth(),
       date.getDate(),
+      date.getHours(),
+      date.getMinutes() + 1,
     );
-    
     this.service.createOrderOnDate(date, nextDate);  
   }
 }

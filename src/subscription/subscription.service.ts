@@ -70,19 +70,14 @@ export class SubscriptionService {
         },
       },
     });
-
     subscriptions.forEach((subscription) => {
-      subscription.users.forEach((user) => {
+      subscription.users.forEach(user => {
         if (user.addresses.length > 0)
           this.repo.order.create({
             data: {
               date: date,
-              address: {
-                connect: user.addresses[0],
-              },
-              user: {
-                connect: user,
-              },
+              addressId: user.addresses[0].id,
+              userId: user.id,
             },
           });
       });
