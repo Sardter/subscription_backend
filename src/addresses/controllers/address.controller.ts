@@ -12,14 +12,15 @@ import { AddressesService } from '../servises/address.service';
 import { Address } from '@prisma/client';
 import { AddressCreateDataInput } from '../interfaces/address.dto';
 import { FilterProcessor, InputFilter } from 'src/interfaces/filter';
+import { AddressFilterProcessor, AddressInputFilter } from '../interfaces/address.filter';
 
 @Controller('addresses')
 export class AddressController {
   constructor(private service: AddressesService) {}
 
   @Get()
-  async filter(@Query() params: InputFilter): Promise<Address[]> {
-    const proccessor = new FilterProcessor();
+  async filter(@Query() params: AddressInputFilter): Promise<Address[]> {
+    const proccessor = new AddressFilterProcessor();
     return this.service.filter(proccessor.toQueryFilter(params));
   }
 

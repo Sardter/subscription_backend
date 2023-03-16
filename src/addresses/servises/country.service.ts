@@ -3,6 +3,7 @@ import { Country } from '@prisma/client';
 import { Filter } from 'src/interfaces/filter';
 import { PrismaService } from 'src/prisma.service';
 import { CountryCreateDataProcessor, CountryCreateInputData } from '../interfaces/country.dto';
+import { CountryFilter } from '../interfaces/country.filter';
 
 @Injectable()
 export class CountriesService {
@@ -13,10 +14,14 @@ export class CountriesService {
       where: {
         id: id,
       },
+      include: {
+        addresses: true,
+        states: true
+      }
     });
   }
 
-  filter(filter: Filter): Promise<Country[]> {
+  filter(filter: CountryFilter): Promise<Country[]> {
     return this.repo.country.findMany(filter);
   }
 

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Subscription } from '@prisma/client';
-import { Filter } from 'src/interfaces/filter';
 import { PrismaService } from 'src/prisma.service';
 import {
   SubscriptionCreateDataProcessor,
   SubscriptionCreateInputData,
 } from './interfaces/create';
+import { SubscriptionFilter } from './interfaces/filter';
 
 @Injectable()
 export class SubscriptionService {
@@ -16,10 +16,13 @@ export class SubscriptionService {
       where: {
         id: id,
       },
+      include: {
+        users: true
+      }
     });
   }
 
-  filter(filter: Filter): Promise<Subscription[]> {
+  filter(filter: SubscriptionFilter): Promise<Subscription[]> {
     return this.repo.subscription.findMany(filter);
   }
 
@@ -71,9 +74,9 @@ export class SubscriptionService {
       },
     });
     subscriptions.forEach((subscription) => {
-      subscription.users.forEach(user => {
+      subscription.users.forEach(async user => {
         if (user.addresses.length > 0)
-          this.repo.order.create({
+          await this.repo.order.create({
             data: {
               date: date,
               addressId: user.addresses[0].id,
@@ -83,7 +86,7 @@ export class SubscriptionService {
       });
     });
 
-    this.repo.subscription.updateMany({
+    await this.repo.subscription.updateMany({
       where: {
         id: {
           in: subscriptions.map((e) => e.id),

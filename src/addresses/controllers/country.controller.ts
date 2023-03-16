@@ -11,6 +11,7 @@ import {
 import { Country } from '@prisma/client';
 import { FilterProcessor, InputFilter } from 'src/interfaces/filter';
 import { CountryCreateInputData } from '../interfaces/country.dto';
+import { CountryFilterProcessor, CountryInputFilter } from '../interfaces/country.filter';
 import { CountriesService } from '../servises/country.service';
 
 @Controller('countries')
@@ -18,8 +19,8 @@ export class CountryController {
   constructor(private service: CountriesService) {}
 
   @Get()
-  async filter(@Query() params: InputFilter): Promise<Country[]> {
-    const proccessor = new FilterProcessor();
+  async filter(@Query() params: CountryInputFilter): Promise<Country[]> {
+    const proccessor = new CountryFilterProcessor();
     return this.service.filter(proccessor.toQueryFilter(params));
   }
 

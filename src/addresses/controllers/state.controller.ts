@@ -9,8 +9,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { State } from '@prisma/client';
-import { FilterProcessor, InputFilter } from 'src/interfaces/filter';
 import { StateCreateInputData } from '../interfaces/state.dto';
+import { StateFilterProcessor, StateInputFilter } from '../interfaces/state.filter';
 import { StatesService } from '../servises/state.service';
 
 @Controller('states')
@@ -18,8 +18,8 @@ export class StateController {
   constructor(private service: StatesService) {}
 
   @Get()
-  async filter(@Query() params: InputFilter): Promise<State[]> {
-    const proccessor = new FilterProcessor();
+  async filter(@Query() params: StateInputFilter): Promise<State[]> {
+    const proccessor = new StateFilterProcessor();
     return this.service.filter(proccessor.toQueryFilter(params));
   }
 

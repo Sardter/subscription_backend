@@ -9,7 +9,7 @@ export class InputFilter {
 }
 
 export class FilterProcessor {
-  private getValue(value: string) {
+  protected getValue(value: string) {
     if (!value) return null;
     const result = parseInt(value);
     return !result ? undefined : result;

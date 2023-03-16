@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { State } from '@prisma/client';
-import { Filter } from 'src/interfaces/filter';
 import { PrismaService } from 'src/prisma.service';
 import { StateCreateDataProcessor, StateCreateInputData } from '../interfaces/state.dto';
+import { StateFilter } from '../interfaces/state.filter';
 
 @Injectable()
 export class StatesService {
@@ -13,10 +13,14 @@ export class StatesService {
       where: {
         id: id,
       },
+      include: {
+        country: true,
+        addresses: true
+      }
     });
   }
 
-  filter(filter: Filter): Promise<State[]> {
+  filter(filter: StateFilter): Promise<State[]> {
     return this.repo.state.findMany(filter);
   }
 

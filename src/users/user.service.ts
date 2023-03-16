@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { assert } from 'console';
 import { Filter } from 'src/interfaces/filter';
 import { PrismaService } from 'src/prisma.service';
 import { UserCreateDataProcessor, UserCreateInputData } from './interfaces/create';
+import { UserFilter } from './interfaces/filter';
 
 @Injectable()
 export class UsersService {
@@ -26,10 +26,15 @@ export class UsersService {
       where: {
         username: username
       },
+      include: {
+        subscriptions: true,
+        orders: true,
+        addresses: true
+      }
     });
   }
 
-  filter(filter: Filter): Promise<User[]> {
+  filter(filter: UserFilter): Promise<User[]> {
     return this.repo.user.findMany(filter);
   }
 
