@@ -56,7 +56,7 @@ export class SubscriptionService {
     const subscriptions = await this.repo.subscription.findMany({
       where: {
         date: {
-          lte: nextDate,
+          lte: date,
         },
       },
       include: {

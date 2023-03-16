@@ -18,7 +18,7 @@ export class TasksService {
       date.getHours() + parseInt(process.env.NEXT_DATE_HOUR_INCREMENT),
       date.getMinutes() + parseInt(process.env.NEXT_DATE_MINUTE_INCREMENT),
     );
-    console.log("Cron Job: creating order on date");
+    console.log(`Cron Job: creating order on date ${date}, next date: ${nextDate}`);
     this.service.createOrderOnDate(date, nextDate);  
   }
 }
