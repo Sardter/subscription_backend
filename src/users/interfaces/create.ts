@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UserCreateData {
+export class UserCreateInputData {
   @ApiProperty()
   email: string;
 
@@ -27,27 +27,29 @@ export class UserCreateData {
 
   @ApiProperty()
   subscriptions?: number[];
+}
 
-  data() {
+export class UserCreateDataProcessor {
+  process(data: UserCreateInputData) {
     return {
-      email: this.email,
-      username: this.username,
-      firstName: this.firstName,
-      lastName: this.lastName,
-      isActive: this.isActive,
-      isStaff: this.isStaff,
-      addresses: {
-        connect: this.addresses.map((address) => {
+      email: data.email,
+      username: data.username,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      isActive: data.isActive,
+      isStaff: data.isStaff,
+      addresses: !data.addresses ? undefined : {
+        connect: data.addresses.map((address) => {
           return { id: address };
         }),
       },
-      orders: {
-        connect: this.orders.map((order) => {
+      orders: !data.orders ? undefined : {
+        connect: data.orders.map((order) => {
           return { id: order };
         }),
       },
-      subscriptions: {
-        connect: this.subscriptions.map((subscription) => {
+      subscriptions: !data.subscriptions ? undefined : {
+        connect: data.subscriptions.map((subscription) => {
           return { id: subscription };
         }),
       },

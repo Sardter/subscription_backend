@@ -1,20 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class SubscriptionCreateData {
+export class SubscriptionCreateInputData {
   @ApiProperty()
   date?: Date;
 
   @ApiProperty()
   users: number[];
+}
 
-  data() {
+export class SubscriptionCreateDataProcessor {
+  process(data: SubscriptionCreateInputData) {
     return {
-      date: this.date,
-      users: {
-        connect: this.users.map((user) => {
-          return { id: user };
+      date: data.date,
+      users: !data.users ? undefined : {
+        connect: data.users.map((order) => {
+          return { id: order };
         }),
       },
-    };
+    }
   }
 }

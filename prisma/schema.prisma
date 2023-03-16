@@ -11,13 +11,13 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  username String  @unique
-  fistName String?
-  lastName String?
-  isActive Boolean @default(true)
-  isStaff  Boolean @default(false)
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  username  String  @unique
+  firstName String?
+  lastName  String?
+  isActive  Boolean @default(true)
+  isStaff   Boolean @default(false)
 
   addresses Address[]
   orders    Order[]
@@ -28,9 +28,9 @@ model User {
 model Order {
   id Int @id @default(autoincrement())
 
-  user      User    @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
-  address   Address @relation(fields: [addressId], references: [id])
+  address   Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
   addressId Int
 
   date DateTime @default(now())
@@ -46,14 +46,14 @@ model Subscription {
 model Address {
   id        Int     @id @default(autoincrement())
   selected  Boolean @default(false)
-  country   Country @relation(fields: [countryId], references: [id])
+  country   Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
   countryId Int
-  state     State   @relation(fields: [stateId], references: [id])
+  state     State   @relation(fields: [stateId], references: [id], onDelete: Cascade)
   stateId   Int
   city      String
   phone     String
 
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 
   orders Order[]
@@ -69,7 +69,7 @@ model Country {
 model State {
   id        Int       @id @default(autoincrement())
   name      String
-  country   Country   @relation(fields: [countryId], references: [id])
+  country   Country   @relation(fields: [countryId], references: [id], onDelete: Cascade)
   countryId Int
   addresses Address[]
 }

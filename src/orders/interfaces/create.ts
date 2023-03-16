@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class OrderCreateData {
+export class OrderCreateInputData {
   @ApiProperty()
   user: number;
 
@@ -9,16 +9,18 @@ export class OrderCreateData {
 
   @ApiProperty()
   date: Date;
+}
 
-  data() {
+export class OrderCreateDataProcessor {
+  process(data: OrderCreateInputData) {
     return {
       user: {
-        connect: { id: this.user },
+        connect: !data.user ? undefined : { id: data.user },
       },
-      address: {
-        connect: { id: this.address },
+      address: !data.address ? undefined : {
+        connect: { id: data.address },
       },
-      date: this.date,
+      date: data.date,
     };
   }
 }

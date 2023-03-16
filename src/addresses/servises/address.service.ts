@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Address } from '@prisma/client';
+import { Filter } from 'src/interfaces/filter';
 import { PrismaService } from 'src/prisma.service';
-import { AddressCreateData } from '../interfaces/address.dto';
-import { AddressFilter } from '../interfaces/filter';
+import {
+  AddressCreateDataInput,
+  AddressCreateDataProcessor,
+} from '../interfaces/address.dto';
 
 @Injectable()
 export class AddressesService {
@@ -16,7 +19,7 @@ export class AddressesService {
     });
   }
 
-  filter(filter: AddressFilter): Promise<Address[]> {
+  filter(filter: Filter): Promise<Address[]> {
     return this.repo.address.findMany(filter);
   }
 
@@ -28,18 +31,20 @@ export class AddressesService {
     });
   }
 
-  create(address: AddressCreateData) {
+  create(address: AddressCreateDataInput) {
+    const proccessor = new AddressCreateDataProcessor();
     return this.repo.address.create({
-      data: address.data()
+      data: proccessor.process(address),
     });
   }
 
-  update(id: number, address: AddressCreateData) {
+  update(id: number, address: AddressCreateDataInput) {
+    const proccessor = new AddressCreateDataProcessor();
     return this.repo.address.update({
       where: {
         id: id,
       },
-      data: address.data(),
+      data: proccessor.process(address),
     });
   }
 }

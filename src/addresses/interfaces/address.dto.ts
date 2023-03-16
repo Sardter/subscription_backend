@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class AddressCreateData {
+export class AddressCreateDataInput {
   @ApiProperty()
   selected: boolean;
 
@@ -21,29 +21,31 @@ export class AddressCreateData {
 
   @ApiProperty()
   orders: number[];
+}
 
-  data() {
+export class AddressCreateDataProcessor {
+  process(data: AddressCreateDataInput) {
     return {
-      selected: this.selected,
-      country: {
+      selected: data.selected,
+      country: !data.country ? undefined : {
         connect: {
-            id: this.country
-        }
+          id: data.country,
+        },
       },
-      state: {
+      state: !data.state ? undefined : {
         connect: {
-            id: this.state
-        }
+          id: data.state,
+        },
       },
-      city: this.city,
-      phone: this.phone,
-      user: {
+      city: data.city,
+      phone: data.phone,
+      user: !data.user ? undefined : {
         connect: {
-            id: this.user
-        }
+          id: data.user,
+        },
       },
-      orders: {
-        connect: this.orders.map((order) => {
+      orders: !data.orders ? undefined : {
+        connect: data.orders.map((order) => {
           return { id: order };
         }),
       },

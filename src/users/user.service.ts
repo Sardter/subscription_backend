@@ -1,31 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { assert } from 'console';
+import { Filter } from 'src/interfaces/filter';
 import { PrismaService } from 'src/prisma.service';
-import { UserCreateData } from './interfaces/create';
-import { UserFilter } from './interfaces/filter';
+import { UserCreateDataProcessor, UserCreateInputData } from './interfaces/create';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly repo: PrismaService) {}
 
   async findOne(
-    id: number | null,
-    username: string | null,
+    id: number,
   ): Promise<User | null> {
-    assert(
-      id != null || username != null,
-      'Both id and username cannot be null',
-    );
     return await this.repo.user.findFirst({
       where: {
-        id: id,
-        username: username,
+        id: id
       },
     });
   }
 
-  filter(filter: UserFilter): Promise<User[]> {
+  async findOneByUsername(
+    username: string,
+  ): Promise<User | null> {
+    return await this.repo.user.findFirst({
+      where: {
+        username: username
+      },
+    });
+  }
+
+  filter(filter: Filter): Promise<User[]> {
     return this.repo.user.findMany(filter);
   }
 
@@ -37,18 +41,20 @@ export class UsersService {
     });
   }
 
-  create(user: UserCreateData) {
+  create(user: UserCreateInputData) {
+    const proccessor = new UserCreateDataProcessor();
     return this.repo.user.create({
-      data: user.data()
+      data: proccessor.process(user),
     });
   }
 
-  update(id: number, user: UserCreateData) {
+  update(id: number, user: UserCreateInputData) {
+    const proccessor = new UserCreateDataProcessor();
     return this.repo.user.update({
       where: {
         id: id,
       },
-      data: user.data(),
+      data: proccessor.process(user),
     });
   }
 }

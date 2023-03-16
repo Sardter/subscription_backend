@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Order } from '@prisma/client';
+import { Filter } from 'src/interfaces/filter';
 import { PrismaService } from 'src/prisma.service';
-import { OrderCreateData } from './interfaces/create';
-import { OrderFilter } from './interfaces/filter';
+import { OrderCreateDataProcessor, OrderCreateInputData } from './interfaces/create';
 
 @Injectable()
 export class OrdersService {
@@ -16,11 +16,8 @@ export class OrdersService {
     });
   }
 
-  filter(filter: OrderFilter): Promise<Order[]> {
-    return this.repo.order.findMany({
-      skip: filter.skip,
-      take: filter.take,
-    });
+  filter(filter: Filter): Promise<Order[]> {
+    return this.repo.order.findMany(filter);
   }
 
   async remove(id: number): Promise<void> {
@@ -31,18 +28,20 @@ export class OrdersService {
     });
   }
 
-  create(order: OrderCreateData) {
+  create(order: OrderCreateInputData) {
+    const proccessor = new OrderCreateDataProcessor();
     return this.repo.order.create({
-      data: order.data()
+      data: proccessor.process(order)
     });
   }
 
-  update(id: number, order: OrderCreateData) {
+  update(id: number, order: OrderCreateInputData) {
+    const proccessor = new OrderCreateDataProcessor();
     return this.repo.order.update({
       where: {
         id: id,
       },
-      data: order.data(),
+      data: proccessor.process(order),
     });
   }
 }

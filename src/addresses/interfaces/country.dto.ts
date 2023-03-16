@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CountryCreateData {
+export class CountryCreateInputData {
   @ApiProperty()
   name: string;
 
@@ -9,20 +9,22 @@ export class CountryCreateData {
 
   @ApiProperty()
   addresses: number[];
+}
 
-  data() {
+export class CountryCreateDataProcessor {
+  proccess(data: CountryCreateInputData) {
     return {
-      name: this.name,
+      name: data.name,
       states: {
-        connect: this.states.map((state) => {
+        connect: data.states.map((state) => {
           return { id: state };
         }),
       },
       addresses: {
-        connect: this.addresses.map((address) => {
+        connect: data.addresses.map((address) => {
           return { id: address };
         }),
       },
-    };
+    }
   }
 }

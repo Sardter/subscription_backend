@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { State } from '@prisma/client';
+import { Filter } from 'src/interfaces/filter';
 import { PrismaService } from 'src/prisma.service';
-import { StateFilter } from '../interfaces/filter';
-import { StateCreateData } from '../interfaces/state.dto';
+import { StateCreateDataProcessor, StateCreateInputData } from '../interfaces/state.dto';
 
 @Injectable()
 export class StatesService {
@@ -16,7 +16,7 @@ export class StatesService {
     });
   }
 
-  filter(filter: StateFilter): Promise<State[]> {
+  filter(filter: Filter): Promise<State[]> {
     return this.repo.state.findMany(filter);
   }
 
@@ -28,18 +28,20 @@ export class StatesService {
     });
   }
 
-  create(state: StateCreateData) {
+  create(state: StateCreateInputData) {
+    const processor = new StateCreateDataProcessor();
     return this.repo.state.create({
-      data: state.data()
+      data: processor.process(state),
     });
   }
 
-  update(id: number, state: StateCreateData) {
+  update(id: number, state: StateCreateInputData) {
+    const processor = new StateCreateDataProcessor();
     return this.repo.state.update({
       where: {
         id: id,
       },
-      data: state.data(),
+      data: processor.process(state),
     });
   }
 }

@@ -9,8 +9,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { Order } from '@prisma/client';
-import { OrderCreateData } from './interfaces/create';
-import { OrderFilter } from './interfaces/filter';
+import { FilterProcessor, InputFilter } from 'src/interfaces/filter';
+import { OrderCreateInputData } from './interfaces/create';
 import { OrdersService } from './order.service';
 
 @Controller('orders')
@@ -18,31 +18,37 @@ export class OrderController {
   constructor(private service: OrdersService) {}
 
   @Get()
-  async filter(@Query() params: OrderFilter): Promise<Order[]> {
-    return this.service.filter(params);
+  async filter(@Query() params: InputFilter): Promise<Order[]> {
+    const proccessor = new FilterProcessor();
+    return this.service.filter(proccessor.toQueryFilter(params));
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<Order | null> {
-    return this.service.findOne(id);
+  async findOne(@Param('id') id: string): Promise<Order | null> {
+    const parsed = parseInt(id);
+    if (!parsed) return null;
+    return this.service.findOne(parsed);
   }
 
   @Post()
-  async create(@Body() body: OrderCreateData): Promise<Order> {
+  async create(@Body() body: OrderCreateInputData): Promise<Order> {
     return this.service.create(body);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<void> {
-    return this.service.remove(id);
+  async remove(@Param('id') id: string): Promise<void> {
+    const parsed = parseInt(id);
+    if (!parsed) return null;
+    return this.service.remove(parsed);
   }
 
   @Patch(':id')
   async update(
-    @Param('id') id: number,
-    @Body() body: OrderCreateData,
+    @Param('id') id: string,
+    @Body() body: OrderCreateInputData,
   ): Promise<Order> {
-    this.service.update(id, body);
-    return this.service.findOne(id);
+    const parsed = parseInt(id);
+    if (!parsed) return null;
+    return this.service.update(parsed, body);
   }
 }

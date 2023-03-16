@@ -9,8 +9,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { State } from '@prisma/client';
-import { StateFilter } from '../interfaces/filter';
-import { StateCreateData } from '../interfaces/state.dto';
+import { FilterProcessor, InputFilter } from 'src/interfaces/filter';
+import { StateCreateInputData } from '../interfaces/state.dto';
 import { StatesService } from '../servises/state.service';
 
 @Controller('states')
@@ -18,31 +18,37 @@ export class StateController {
   constructor(private service: StatesService) {}
 
   @Get()
-  async filter(@Query() params: StateFilter): Promise<State[]> {
-    return this.service.filter(params);
+  async filter(@Query() params: InputFilter): Promise<State[]> {
+    const proccessor = new FilterProcessor();
+    return this.service.filter(proccessor.toQueryFilter(params));
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<State | null> {
-    return this.service.findOne(id);
+  async findOne(@Param('id') id: string): Promise<State | null> {
+    const parsed = parseInt(id);
+    if (!parsed) return null;
+    return this.service.findOne(parsed);
   }
 
   @Post()
-  async create(@Body() body: StateCreateData): Promise<State> {
+  async create(@Body() body: StateCreateInputData): Promise<State> {
     return this.service.create(body);
   }
 
-  @Delete()
-  async remove(@Param('id') id: number): Promise<void> {
-    return this.service.remove(id);
+  @Delete(':id')
+  async remove(@Param('id') id: string): Promise<void> {
+    const parsed = parseInt(id);
+    if (!parsed) return null;
+    return this.service.remove(parsed);
   }
 
-  @Patch()
+  @Patch(':id')
   async update(
-    @Param('id') id: number,
-    @Body() body: StateCreateData,
+    @Param('id') id: string,
+    @Body() body: StateCreateInputData,
   ): Promise<State> {
-    this.service.update(id, body);
-    return this.service.findOne(id);
+    const parsed = parseInt(id);
+    if (!parsed) return null;
+    return this.service.update(parsed, body);
   }
 }

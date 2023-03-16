@@ -9,8 +9,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { Country } from '@prisma/client';
-import { CountryCreateData } from '../interfaces/country.dto';
-import { CountryFilter } from '../interfaces/filter';
+import { FilterProcessor, InputFilter } from 'src/interfaces/filter';
+import { CountryCreateInputData } from '../interfaces/country.dto';
 import { CountriesService } from '../servises/country.service';
 
 @Controller('countries')
@@ -18,31 +18,37 @@ export class CountryController {
   constructor(private service: CountriesService) {}
 
   @Get()
-  async filter(@Query() params: CountryFilter): Promise<Country[]> {
-    return this.service.filter(params);
+  async filter(@Query() params: InputFilter): Promise<Country[]> {
+    const proccessor = new FilterProcessor();
+    return this.service.filter(proccessor.toQueryFilter(params));
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<Country | null> {
-    return this.service.findOne(id);
+  async findOne(@Param('id') id: string): Promise<Country | null> {
+    const parsed = parseInt(id);
+    if (!parsed) return null;
+    return this.service.findOne(parsed);
   }
 
   @Post()
-  async create(@Body() body: CountryCreateData): Promise<Country> {
+  async create(@Body() body: CountryCreateInputData): Promise<Country> {
     return this.service.create(body);
   }
 
-  @Delete()
-  async remove(@Param('id') id: number): Promise<void> {
-    return this.service.remove(id);
+  @Delete(':id')
+  async remove(@Param('id') id: string): Promise<void> {
+    const parsed = parseInt(id);
+    if (!parsed) return null;
+    return this.service.remove(parsed);
   }
 
-  @Patch()
+  @Patch(':id')
   async update(
-    @Param('id') id: number,
-    @Body() body: CountryCreateData,
+    @Param('id') id: string,
+    @Body() body: CountryCreateInputData,
   ): Promise<Country> {
-    this.service.update(id, body);
-    return this.service.findOne(id);
+    const parsed = parseInt(id);
+    if (!parsed) return null;
+    return this.service.update(parsed, body);
   }
 }
