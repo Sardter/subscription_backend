@@ -5,7 +5,7 @@ This is a basic subscription engine which creates orders for the users that are 
 ## Models
 
 <p align="center">
-  <img src="https://github.com/Sardter/beije_backend/blob/master/models.png?raw=true" width="200" alt="Models" />
+  <img src="https://github.com/Sardter/beije_backend/blob/master/models.png?raw=true" alt="Models" />
 </p>
 
 The service is comprised of 6 models:
