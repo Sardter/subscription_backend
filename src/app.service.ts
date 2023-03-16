@@ -6,6 +6,7 @@ export class GeneratorService {
   constructor(private readonly repo: PrismaService) {}
 
   async generateMockData() {
+    // mock data
     await this.repo.country.createMany({
       data: [
         { name: 'Türkiye' },

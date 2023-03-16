@@ -27,3 +27,10 @@ export interface Filter {
   take?: number;
   skip?: number;
 }
+
+
+export function idParser(id: string): number | null {
+  const parsed = parseInt(id);
+  if (!parsed) return null;
+  return parsed;
+}

@@ -3,12 +3,14 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
   Query,
 } from '@nestjs/common';
 import { State } from '@prisma/client';
+import { idParser } from 'src/interfaces/filter';
 import { StateCreateInputData } from '../interfaces/state.dto';
 import {
   StateFilterProcessor,
@@ -28,30 +30,27 @@ export class StateController {
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<State | null> {
-    const parsed = parseInt(id);
-    if (!parsed) return null;
-    return this.service.findOne(parsed);
+    return this.service.findOne(idParser(id));
   }
 
   @Post()
+  @HttpCode(201)
   async create(@Body() body: StateCreateInputData): Promise<State> {
     return this.service.create(body);
   }
 
   @Delete(':id')
+  @HttpCode(204)
   async remove(@Param('id') id: string): Promise<void> {
-    const parsed = parseInt(id);
-    if (!parsed) return null;
-    return this.service.remove(parsed);
+    return this.service.remove(idParser(id));
   }
 
   @Patch(':id')
+  @HttpCode(206)
   async update(
     @Param('id') id: string,
     @Body() body: StateCreateInputData,
   ): Promise<State> {
-    const parsed = parseInt(id);
-    if (!parsed) return null;
-    return this.service.update(parsed, body);
+    return this.service.update(idParser(id), body);
   }
 }

@@ -56,6 +56,8 @@ export class SubscriptionService {
   }
 
   async createOrderOnDate(date: Date, nextDate: Date | null): Promise<boolean> {
+    // Get subscriptions that have date smaller than the date and which addresses are not empty
+    // include the addresses that are selected: since only one address can be selected, len will be 1
     const subscriptions = await this.repo.subscription.findMany({
       where: {
         date: {
@@ -77,13 +79,15 @@ export class SubscriptionService {
         },
       },
     });
+
+    // create order and initiate payment for each user
     subscriptions.forEach((subscription) => {
       subscription.users.forEach(async (user) => {
         if (user.addresses.length > 0) {
           const oreder = await this.repo.order.create({
             data: {
               date: date,
-              addressId: user.addresses[0].id,
+              addressId: user.addresses[0].id, // length garanteed to be 1
               userId: user.id,
             },
           });
@@ -96,6 +100,7 @@ export class SubscriptionService {
       });
     });
 
+    // update the dates of the subscriptions to the next date
     await this.repo.subscription.updateMany({
       where: {
         id: {

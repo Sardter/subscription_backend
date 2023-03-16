@@ -11,8 +11,10 @@ import { AddressFilter } from '../interfaces/address.filter';
 export class AddressesService {
   constructor(private readonly repo: PrismaService) {}
 
+  // make sure only one address is selected per user
   private async onAddressCreatedAndUpdated(address: Address | null) {
     if (address && address.selected) {
+      // unselect all addresses of user
       await this.repo.address.updateMany({
         where: {
           user: {
@@ -23,6 +25,7 @@ export class AddressesService {
           selected: false,
         },
       });
+      // since none of user addresses is not selected, selected the current address
       await this.repo.address.update({
         where: {
           id: address.id,
