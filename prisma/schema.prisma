@@ -45,7 +45,7 @@ model Subscription {
 
 model Address {
   id        Int     @id @default(autoincrement())
-  selected  Boolean @default(false)
+  selected  Boolean @default(true)
   country   Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
   countryId Int
   state     State   @relation(fields: [stateId], references: [id], onDelete: Cascade)

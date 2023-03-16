@@ -11,6 +11,28 @@ import { AddressFilter } from '../interfaces/address.filter';
 export class AddressesService {
   constructor(private readonly repo: PrismaService) {}
 
+  private async onAddressCreatedAndUpdated(address: Address | null) {
+    if (address && address.selected) {
+      await this.repo.address.updateMany({
+        where: {
+          user: {
+            id: address.userId
+          }
+        }, data: {
+          selected: false
+        }
+      });
+      await this.repo.address.update({
+        where: {
+          id: address.id
+        },
+        data: {
+          selected: true
+        }
+      })
+    }
+  }
+
   async findOne(id: number): Promise<Address | null> {
     return await this.repo.address.findFirst({
       where: {
@@ -18,7 +40,7 @@ export class AddressesService {
       },
       include: {
         orders: true,
-        
+
       }
     });
   }
@@ -35,20 +57,24 @@ export class AddressesService {
     });
   }
 
-  create(address: AddressCreateDataInput) {
+  async create(address: AddressCreateDataInput) {
     const proccessor = new AddressCreateDataProcessor();
-    return this.repo.address.create({
+    const created = await this.repo.address.create({
       data: proccessor.process(address),
     });
+    await this.onAddressCreatedAndUpdated(created);
+    return created;
   }
 
-  update(id: number, address: AddressCreateDataInput) {
+  async update(id: number, address: AddressCreateDataInput) {
     const proccessor = new AddressCreateDataProcessor();
-    return this.repo.address.update({
+    const updated = await this.repo.address.update({
       where: {
         id: id,
       },
       data: proccessor.process(address),
     });
+    await this.onAddressCreatedAndUpdated(updated);
+    return updated;
   }
 }

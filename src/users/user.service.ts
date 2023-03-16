@@ -16,6 +16,11 @@ export class UsersService {
       where: {
         id: id
       },
+      include: {
+        subscriptions: true,
+        orders: true,
+        addresses: true
+      }
     });
   }
 

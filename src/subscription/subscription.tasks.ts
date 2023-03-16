@@ -13,12 +13,12 @@ export class TasksService {
     const date = new Date();
     const nextDate = new Date(
       date.getFullYear(),
-      //date.getMonth() + 1,
-      date.getMonth(),
-      date.getDate(),
-      date.getHours(),
-      date.getMinutes() + 1,
+      date.getMonth() + parseInt(process.env.NEXT_DATE_MONTH_INCREMENT),
+      date.getDate() + parseInt(process.env.NEXT_DATE_DAY_INCREMENT),
+      date.getHours() + parseInt(process.env.NEXT_DATE_HOUR_INCREMENT),
+      date.getMinutes() + parseInt(process.env.NEXT_DATE_MINUTE_INCREMENT),
     );
+    console.log("Cron Job: creating order on date");
     this.service.createOrderOnDate(date, nextDate);  
   }
 }
