@@ -9,9 +9,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { Country } from '@prisma/client';
-import { FilterProcessor, InputFilter } from 'src/interfaces/filter';
 import { CountryCreateInputData } from '../interfaces/country.dto';
-import { CountryFilterProcessor, CountryInputFilter } from '../interfaces/country.filter';
+import {
+  CountryFilterProcessor,
+  CountryInputFilter,
+} from '../interfaces/country.filter';
 import { CountriesService } from '../servises/country.service';
 
 @Controller('countries')

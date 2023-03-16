@@ -11,8 +11,10 @@ import {
 import { AddressesService } from '../servises/address.service';
 import { Address } from '@prisma/client';
 import { AddressCreateDataInput } from '../interfaces/address.dto';
-import { FilterProcessor, InputFilter } from 'src/interfaces/filter';
-import { AddressFilterProcessor, AddressInputFilter } from '../interfaces/address.filter';
+import {
+  AddressFilterProcessor,
+  AddressInputFilter,
+} from '../interfaces/address.filter';
 
 @Controller('addresses')
 export class AddressController {

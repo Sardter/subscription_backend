@@ -6,6 +6,6 @@ import { CountriesService } from '../servises/country.service';
 @Module({
   providers: [CountriesService, PrismaService],
   controllers: [CountryController],
-  exports: [CountriesService]
+  exports: [CountriesService],
 })
 export class CountryModule {}

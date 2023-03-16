@@ -8,6 +8,6 @@ import { StripService } from 'src/stripe.service';
 @Module({
   providers: [SubscriptionService, TasksService, PrismaService, StripService],
   controllers: [SubscriptionController],
-  exports: [SubscriptionService, TasksService]
+  exports: [SubscriptionService, TasksService],
 })
 export class SubscriptionModule {}

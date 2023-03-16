@@ -10,7 +10,10 @@ import {
 } from '@nestjs/common';
 import { Subscription } from '@prisma/client';
 import { SubscriptionCreateInputData } from './interfaces/create';
-import { SubscriptionFilterProcessor, SubscriptionInputFilter } from './interfaces/filter';
+import {
+  SubscriptionFilterProcessor,
+  SubscriptionInputFilter,
+} from './interfaces/filter';
 import { SubscriptionService } from './subscription.service';
 
 @Controller('subscriptions')
@@ -18,7 +21,9 @@ export class SubscriptionController {
   constructor(private service: SubscriptionService) {}
 
   @Get()
-  async filter(@Query() params: SubscriptionInputFilter): Promise<Subscription[]> {
+  async filter(
+    @Query() params: SubscriptionInputFilter,
+  ): Promise<Subscription[]> {
     const proccessor = new SubscriptionFilterProcessor();
     return this.service.filter(proccessor.toQueryFilter(params));
   }
@@ -31,7 +36,9 @@ export class SubscriptionController {
   }
 
   @Post()
-  async create(@Body() body: SubscriptionCreateInputData): Promise<Subscription> {
+  async create(
+    @Body() body: SubscriptionCreateInputData,
+  ): Promise<Subscription> {
     return this.service.create(body);
   }
 
@@ -43,7 +50,10 @@ export class SubscriptionController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() body: SubscriptionCreateInputData): Promise<Subscription | null> {
+  async update(
+    @Param('id') id: string,
+    @Body() body: SubscriptionCreateInputData,
+  ): Promise<Subscription | null> {
     const parsed = parseInt(id);
     if (!parsed) return null;
     return this.service.update(parsed, body);

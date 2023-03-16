@@ -15,8 +15,8 @@ export class CountryFilterProcessor extends FilterProcessor {
       take: super.getValue(inputFilter.take),
       skip: super.getValue(inputFilter.skip),
       include: {
-        addresses: (inputFilter.showAddresses as unknown as String) === 'true',
-        states: inputFilter.showStates as unknown as String === 'true'
+        addresses: (inputFilter.showAddresses as unknown as string) === 'true',
+        states: (inputFilter.showStates as unknown as string) === 'true',
       },
     };
   }

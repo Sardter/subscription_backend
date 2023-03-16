@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Country } from '@prisma/client';
-import { Filter } from 'src/interfaces/filter';
 import { PrismaService } from 'src/prisma.service';
-import { CountryCreateDataProcessor, CountryCreateInputData } from '../interfaces/country.dto';
+import {
+  CountryCreateDataProcessor,
+  CountryCreateInputData,
+} from '../interfaces/country.dto';
 import { CountryFilter } from '../interfaces/country.filter';
 
 @Injectable()
@@ -16,8 +18,8 @@ export class CountriesService {
       },
       include: {
         addresses: true,
-        states: true
-      }
+        states: true,
+      },
     });
   }
 
@@ -36,7 +38,7 @@ export class CountriesService {
   create(country: CountryCreateInputData) {
     const processor = new CountryCreateDataProcessor();
     return this.repo.country.create({
-      data: processor.proccess(country)
+      data: processor.proccess(country),
     });
   }
 

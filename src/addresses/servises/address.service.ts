@@ -16,20 +16,21 @@ export class AddressesService {
       await this.repo.address.updateMany({
         where: {
           user: {
-            id: address.userId
-          }
-        }, data: {
-          selected: false
-        }
+            id: address.userId,
+          },
+        },
+        data: {
+          selected: false,
+        },
       });
       await this.repo.address.update({
         where: {
-          id: address.id
+          id: address.id,
         },
         data: {
-          selected: true
-        }
-      })
+          selected: true,
+        },
+      });
     }
   }
 
@@ -40,8 +41,7 @@ export class AddressesService {
       },
       include: {
         orders: true,
-
-      }
+      },
     });
   }
 

@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { State } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
-import { StateCreateDataProcessor, StateCreateInputData } from '../interfaces/state.dto';
+import {
+  StateCreateDataProcessor,
+  StateCreateInputData,
+} from '../interfaces/state.dto';
 import { StateFilter } from '../interfaces/state.filter';
 
 @Injectable()
@@ -15,8 +18,8 @@ export class StatesService {
       },
       include: {
         country: true,
-        addresses: true
-      }
+        addresses: true,
+      },
     });
   }
 

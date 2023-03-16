@@ -4,9 +4,7 @@ import { SubscriptionService } from './subscription.service';
 
 @Injectable()
 export class TasksService {
-  constructor(
-    private service: SubscriptionService,
-  ) {}
+  constructor(private service: SubscriptionService) {}
 
   @Cron(CronExpression.EVERY_10_SECONDS)
   async handleCron() {
@@ -18,7 +16,9 @@ export class TasksService {
       date.getHours() + parseInt(process.env.NEXT_DATE_HOUR_INCREMENT),
       date.getMinutes() + parseInt(process.env.NEXT_DATE_MINUTE_INCREMENT),
     );
-    console.log(`Cron Job: creating order on date ${date}, next date: ${nextDate}`);
-    this.service.createOrderOnDate(date, nextDate);  
+    console.log(
+      `Cron Job: creating order on date ${date}, next date: ${nextDate}`,
+    );
+    this.service.createOrderOnDate(date, nextDate);
   }
 }

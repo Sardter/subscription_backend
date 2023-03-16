@@ -17,9 +17,11 @@ export class OrderCreateDataProcessor {
       user: {
         connect: !data.user ? undefined : { id: data.user },
       },
-      address: !data.address ? undefined : {
-        connect: { id: data.address },
-      },
+      address: !data.address
+        ? undefined
+        : {
+            connect: { id: data.address },
+          },
       date: data.date,
     };
   }

@@ -10,7 +10,10 @@ import {
 } from '@nestjs/common';
 import { State } from '@prisma/client';
 import { StateCreateInputData } from '../interfaces/state.dto';
-import { StateFilterProcessor, StateInputFilter } from '../interfaces/state.filter';
+import {
+  StateFilterProcessor,
+  StateInputFilter,
+} from '../interfaces/state.filter';
 import { StatesService } from '../servises/state.service';
 
 @Controller('states')

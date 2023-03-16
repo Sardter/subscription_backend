@@ -1,41 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { Filter } from 'src/interfaces/filter';
 import { PrismaService } from 'src/prisma.service';
-import { UserCreateDataProcessor, UserCreateInputData } from './interfaces/create';
+import {
+  UserCreateDataProcessor,
+  UserCreateInputData,
+} from './interfaces/create';
 import { UserFilter } from './interfaces/filter';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly repo: PrismaService) {}
 
-  async findOne(
-    id: number,
-  ): Promise<User | null> {
+  async findOne(id: number): Promise<User | null> {
     return await this.repo.user.findFirst({
       where: {
-        id: id
+        id: id,
       },
       include: {
         subscriptions: true,
         orders: true,
-        addresses: true
-      }
+        addresses: true,
+      },
     });
   }
 
-  async findOneByUsername(
-    username: string,
-  ): Promise<User | null> {
+  async findOneByUsername(username: string): Promise<User | null> {
     return await this.repo.user.findFirst({
       where: {
-        username: username
+        username: username,
       },
       include: {
         subscriptions: true,
         orders: true,
-        addresses: true
-      }
+        addresses: true,
+      },
     });
   }
 

@@ -12,11 +12,13 @@ export class SubscriptionCreateDataProcessor {
   process(data: SubscriptionCreateInputData) {
     return {
       date: data.date,
-      users: !data.users ? undefined : {
-        connect: data.users.map((order) => {
-          return { id: order };
-        }),
-      },
-    }
+      users: !data.users
+        ? undefined
+        : {
+            connect: data.users.map((order) => {
+              return { id: order };
+            }),
+          },
+    };
   }
 }

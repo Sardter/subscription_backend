@@ -38,21 +38,27 @@ export class UserCreateDataProcessor {
       lastName: data.lastName,
       isActive: data.isActive,
       isStaff: data.isStaff,
-      addresses: !data.addresses ? undefined : {
-        connect: data.addresses.map((address) => {
-          return { id: address };
-        }),
-      },
-      orders: !data.orders ? undefined : {
-        connect: data.orders.map((order) => {
-          return { id: order };
-        }),
-      },
-      subscriptions: !data.subscriptions ? undefined : {
-        connect: data.subscriptions.map((subscription) => {
-          return { id: subscription };
-        }),
-      },
+      addresses: !data.addresses
+        ? undefined
+        : {
+            connect: data.addresses.map((address) => {
+              return { id: address };
+            }),
+          },
+      orders: !data.orders
+        ? undefined
+        : {
+            connect: data.orders.map((order) => {
+              return { id: order };
+            }),
+          },
+      subscriptions: !data.subscriptions
+        ? undefined
+        : {
+            connect: data.subscriptions.map((subscription) => {
+              return { id: subscription };
+            }),
+          },
     };
   }
 }

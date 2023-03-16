@@ -25,6 +25,6 @@ export class CountryCreateDataProcessor {
           return { id: address };
         }),
       },
-    }
+    };
   }
 }

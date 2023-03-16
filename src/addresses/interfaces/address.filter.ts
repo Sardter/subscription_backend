@@ -12,7 +12,7 @@ export class AddressFilterProcessor extends FilterProcessor {
       take: super.getValue(inputFilter.take),
       skip: super.getValue(inputFilter.skip),
       include: {
-        orders: (inputFilter.showOrders as unknown as String) === 'true',
+        orders: (inputFilter.showOrders as unknown as string) === 'true',
       },
     };
   }

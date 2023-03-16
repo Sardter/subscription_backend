@@ -12,7 +12,7 @@ export class SubscriptionFilterProcessor extends FilterProcessor {
       take: super.getValue(inputFilter.take),
       skip: super.getValue(inputFilter.skip),
       include: {
-        users: (inputFilter.showUsers as unknown as String) === 'true',
+        users: (inputFilter.showUsers as unknown as string) === 'true',
       },
     };
   }

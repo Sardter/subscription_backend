@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { User } from '@prisma/client';
 import { UserCreateInputData } from './interfaces/create';
 import { UserFilterProcessor, UserInputFilter } from './interfaces/filter';
@@ -15,9 +24,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOneById(
-    @Param('id') id: string,
-  ): Promise<User | null> {
+  async findOneById(@Param('id') id: string): Promise<User | null> {
     const parsed = parseInt(id);
     if (!parsed) return null;
     return this.service.findOne(parsed);
@@ -43,7 +50,10 @@ export class UsersController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() body: UserCreateInputData): Promise<User | null> {
+  async update(
+    @Param('id') id: string,
+    @Body() body: UserCreateInputData,
+  ): Promise<User | null> {
     const parsed = parseInt(id);
     if (!parsed) return null;
     return this.service.update(parsed, body);

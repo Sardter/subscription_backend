@@ -11,7 +11,6 @@ export class StateCreateInputData {
   addresses: number[];
 }
 
-
 export class StateCreateDataProcessor {
   process(data: StateCreateInputData) {
     return {
@@ -21,11 +20,13 @@ export class StateCreateDataProcessor {
           id: data.country,
         },
       },
-      addresses: !data.addresses ? {} : {
-        connect: data.addresses.map((address) => {
-          return { id: address };
-        }),
-      },
+      addresses: !data.addresses
+        ? {}
+        : {
+            connect: data.addresses.map((address) => {
+              return { id: address };
+            }),
+          },
     };
   }
 }

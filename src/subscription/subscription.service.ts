@@ -10,7 +10,10 @@ import { SubscriptionFilter } from './interfaces/filter';
 
 @Injectable()
 export class SubscriptionService {
-  constructor(private readonly repo: PrismaService, private readonly stripe: StripService) {}
+  constructor(
+    private readonly repo: PrismaService,
+    private readonly stripe: StripService,
+  ) {}
 
   async findOne(id: number | null): Promise<Subscription | null> {
     return await this.repo.subscription.findFirst({
@@ -18,8 +21,8 @@ export class SubscriptionService {
         id: id,
       },
       include: {
-        users: true
-      }
+        users: true,
+      },
     });
   }
 
@@ -75,7 +78,7 @@ export class SubscriptionService {
       },
     });
     subscriptions.forEach((subscription) => {
-      subscription.users.forEach(async user => {
+      subscription.users.forEach(async (user) => {
         if (user.addresses.length > 0) {
           const oreder = await this.repo.order.create({
             data: {
@@ -84,10 +87,12 @@ export class SubscriptionService {
               userId: user.id,
             },
           });
-          const payment = await this.stripe.proccessPayment(oreder.cost, oreder.currency);
-          console.log("Payment:", payment);
+          const payment = await this.stripe.proccessPayment(
+            oreder.cost,
+            oreder.currency,
+          );
+          console.log('Payment:', payment);
         }
-          
       });
     });
 
