@@ -8,7 +8,7 @@ export class TasksService {
     private service: SubscriptionService,
   ) {}
 
-  @Cron(CronExpression.EVERY_MINUTE)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async handleCron() {
     const date = new Date();
     const nextDate = new Date(

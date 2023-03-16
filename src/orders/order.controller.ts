@@ -16,7 +16,6 @@ import { OrdersService } from './order.service';
 @Controller('orders')
 export class OrderController {
   constructor(private service: OrdersService) {}
-
   @Get()
   async filter(@Query() params: InputFilter): Promise<Order[]> {
     const proccessor = new FilterProcessor();

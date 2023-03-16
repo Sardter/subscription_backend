@@ -33,6 +33,9 @@ model Order {
   address   Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
   addressId Int
 
+  cost     Float  @default(100)
+  currency String @default("TL")
+
   date DateTime @default(now())
 }
 

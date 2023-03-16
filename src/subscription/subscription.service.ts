@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Subscription } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import { StripService } from 'src/stripe.service';
 import {
   SubscriptionCreateDataProcessor,
   SubscriptionCreateInputData,
@@ -9,7 +10,7 @@ import { SubscriptionFilter } from './interfaces/filter';
 
 @Injectable()
 export class SubscriptionService {
-  constructor(private readonly repo: PrismaService) {}
+  constructor(private readonly repo: PrismaService, private readonly stripe: StripService) {}
 
   async findOne(id: number | null): Promise<Subscription | null> {
     return await this.repo.subscription.findFirst({
@@ -75,14 +76,18 @@ export class SubscriptionService {
     });
     subscriptions.forEach((subscription) => {
       subscription.users.forEach(async user => {
-        if (user.addresses.length > 0)
-          await this.repo.order.create({
+        if (user.addresses.length > 0) {
+          const oreder = await this.repo.order.create({
             data: {
               date: date,
               addressId: user.addresses[0].id,
               userId: user.id,
             },
           });
+          const payment = await this.stripe.proccessPayment(oreder.cost, oreder.currency);
+          console.log("Payment:", payment);
+        }
+          
       });
     });
 
