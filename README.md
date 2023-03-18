@@ -136,3 +136,9 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+Make sure that you have applied the necessary database migrations by running:
+
+```bash
+npx prisma migrate dev --name init
+```
